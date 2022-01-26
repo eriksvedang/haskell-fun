@@ -63,7 +63,7 @@ ex4 = let db0 = DB []
 -- Or rather
 -- writeDB "erik" 100 ==> writeDB "johannes" 200 ==> readDB "erik"
 
-andThen :: (DB Int, Int) -> (Int -> DB Int -> (DB Int, Int)) -> (DB Int, Int)
+andThen :: (DB Int, a) -> (a -> DB Int -> (DB Int, b)) -> (DB Int, b)
 andThen (DB db, val) f =
   let (DB db2, res2) = f val (DB db)
   in (DB (db2 ++ db), res2)
@@ -75,8 +75,8 @@ ex5 = (DB [], 0)
   `andThen` \x _ -> (DB [("johannes", x * 2)], 0)
 
 -- Let's add some helpers
-dbWrite :: String -> Int -> DB Int -> (DB Int, Int)
-dbWrite key val = \_ -> (DB [(key, val)], 0)
+dbWrite :: String -> Int -> DB Int -> (DB Int, ())
+dbWrite key val = \_ -> (DB [(key, val)], ())
 
 dbRead :: String -> DB Int -> (DB Int, Int)
 dbRead key = \(DB db) -> (DB [], fromJust (lookup key db))
