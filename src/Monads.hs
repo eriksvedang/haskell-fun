@@ -68,11 +68,11 @@ andThen (DB db, val) f =
   let (DB db2, res2) = f val (DB db)
   in (DB (db2 ++ db), res2)
 
---ex5 :: (DB Int, ())
-ex5 = (DB [], 0)
-  `andThen` \_ _ -> (DB [("erik", 100)], 0)
+ex5 :: (DB Int, ())
+ex5 = (DB [], ())
+  `andThen` \_ _ -> (DB [("erik", 100)], ())
   `andThen` \_ (DB db) -> (DB [], fromJust (lookup "erik" db))
-  `andThen` \x _ -> (DB [("johannes", x * 2)], 0)
+  `andThen` \x _ -> (DB [("johannes", x * 2)], ())
 
 -- Let's add some helpers
 dbWrite :: String -> Int -> DB Int -> (DB Int, ())
@@ -81,6 +81,7 @@ dbWrite key val = \_ -> (DB [(key, val)], ())
 dbRead :: String -> DB Int -> (DB Int, Int)
 dbRead key = \(DB db) -> (DB [], fromJust (lookup key db))
 
+ex6 :: (DB Int, ())
 ex6 = (DB [], 0)
   `andThen` (\_ -> dbWrite "erik" 100)
   `andThen` (\_ -> dbRead "erik")
@@ -96,4 +97,5 @@ ex6 = (DB [], 0)
 -- Monad is just an "interface" (or typeclass / trait)
 -- Tries to abstract this function 'pipe', 'andThen', etc.
 -- Also gives us do-notation.
--- That's it!
+
+-- "A monad" is an instance of this interface -- that's it!
