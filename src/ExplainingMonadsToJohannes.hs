@@ -29,9 +29,18 @@ pipe Nan _ = Nan
 pipe (Number n) f = f n
 
 ex2 :: N
-ex2 = Number 9 `pipe` (\x -> if even x then Number (x `div` 2) else Nan) `pipe` (\x -> Number (x * 2))
+ex2 =
+  Number 9
+  `pipe` (\x -> if even x then Number (x `div` 2) else Nan)
+  `pipe` (\x -> Number (x * 2))
 
+-- compose f g x = g (f x)
+add1 x = x + 1
+sub1 x = x - 1
+(add1 `compose` add1 `compose` sub1) 11
 
+Int -> Int `compose` Int -> Int
+Int -> Nat `pipe` Int -> Nat
 
 --- Part 2: We want to create a database, but using only *pure* functions
 
@@ -46,8 +55,8 @@ writeDB key value (DB bindings) = (DB ((key, value) : bindings), ())
 
 ex3 :: Int
 ex3 = let db0 = DB []
-          (db1, _) = writeDB "erik" 100 db0
-          (db2, _) = writeDB "johannes" 200 db1
+          (db1, ()) = writeDB "erik" 100 db0
+          (db2, ()) = writeDB "johannes" 200 db1
           (_, x)   = readDB "erik" db2
       in x
 
@@ -84,18 +93,17 @@ dbRead key = \(DB db) -> (DB [], fromJust (lookup key db))
 ex6 :: (DB Int, ())
 ex6 = (DB [], 0)
   `andThen` (\_ -> dbWrite "erik" 100)
-  `andThen` (\_ -> dbRead "erik")
-  `andThen` (\x -> dbWrite "johannes" (x * 2))
-
+    `andThen` (\_ -> dbRead "erik")
+      `andThen` (\x -> dbWrite "johannes" (x * 2))
 -- ex7 = runDB (DB []) (do dbWrite "erik" 100
 --                         x <- dbRead "erik"
 --                         dbWrite "johannes" (x * 2))
-
 
 -- Part 3: The monad typeclass
 
 -- Monad is just an "interface" (or typeclass / trait)
 -- Tries to abstract this function 'pipe', 'andThen', etc.
+-- bind / >>=
 -- Also gives us do-notation.
 
 -- "A monad" is an instance of this interface -- that's it!
