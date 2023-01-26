@@ -18,4 +18,5 @@ executable hask-fun
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
+                       containers >= 0.6.5.1,
                        text >= 1.2.4.1
