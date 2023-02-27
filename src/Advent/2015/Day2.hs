@@ -3,9 +3,10 @@
 module Day2 where
 
 import Data.List (sort)
+import Data.Text (Text)
 import qualified Data.Text as T
 
-parse :: T.Text -> (Int, Int, Int)
+parse :: Text -> (Int, Int, Int)
 parse s =
   case fmap T.unpack (T.splitOn "x" s) of
     [a,b,c] -> (read a, read b, read c)
