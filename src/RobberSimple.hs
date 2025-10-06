@@ -4,9 +4,9 @@ expand :: Char -> String
 expand c = if isConsonant c then [c, 'o', c] else [c]
 
 isConsonant :: Char -> Bool
-isConsonant c = elem c "bcdfghjklmnpqrstuvwxz"
+isConsonant c = c `elem` "bcdfghjklmnpqrstuvwxz"
 
 robber :: String -> String
-robber word = concatMap expand word
+robber = concatMap expand
 
 main = interact robber

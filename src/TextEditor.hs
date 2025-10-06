@@ -6,9 +6,14 @@ instance Show EditorState where
   show (EditorState before after) = "'" ++ before ++ "|" ++ after ++ "'"
 
 emptyState :: EditorState
-emptyState = EditorState "" ""
+emptyState =
+  EditorState "" ""
 
-data Action = MoveLeft | MoveRight | Insert Char | Erase
+data Action
+  = MoveLeft
+  | MoveRight
+  | Insert Char
+  | Erase
 
 execute :: EditorState -> Action -> EditorState
 execute (EditorState "" after) MoveLeft = EditorState "" after
@@ -20,13 +25,13 @@ execute (EditorState before after) Erase = EditorState (init before) after
 
 session :: [Action]
 session =
-  [ Insert 'i'
-  , MoveLeft
-  , Insert 'h'
-  , MoveRight
-  , Insert 'x'
-  , Erase
-  , Insert '!'
+  [ Insert 'i',
+    MoveLeft,
+    Insert 'h',
+    MoveRight,
+    Insert 'x',
+    Erase,
+    Insert '!'
   ]
 
 main = do
